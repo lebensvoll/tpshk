@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TPS HK — Score Entry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="adm-bar" id="admBar"></div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-row">
+      <div class="brand">
+        <h1 class="brand-title">Tatler Padel Series Hong Kong</h1>
+        <p class="brand-sub"><b>23&ndash;25 Oct 2026</b><span class="sep">&middot;</span>Pick &amp; Match<span class="sep">&middot;</span>43 pairs &middot; 6 titles &middot; one court</p>
+      </div>
+      <div class="view-toggle">
+        <button data-view="web">Web</button>
+        <button data-view="mobile">Mobile</button>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn" data-tab="champions">Champions</button>
+      <button class="tab-btn active" data-tab="schedule">Schedule</button>
+      <button class="tab-btn" data-tab="groups">Groups</button>
+      <button class="tab-btn" data-tab="playoff">Playoff</button>
+      <button class="tab-btn" data-tab="rankings">Rankings</button>
+      <button class="tab-btn" data-tab="format">Format</button>
+    </nav>
+  </div>
+</header>
+
+<main class="app-shell">
+  <div class="filter-bar">
+    <div class="filter-group" id="categoryFilter">
+      <span class="filter-label">Category</span>
+      <button class="pill-btn active" data-catf="All">All</button>
+      <button class="pill-btn" data-catf="Male">Men</button>
+      <button class="pill-btn" data-catf="Female">Women</button>
+    </div>
+    <div class="filter-group" id="tierFilter">
+      <span class="filter-label">Tier</span>
+      <button class="pill-btn active" data-tierf="All">All</button>
+      <button class="pill-btn" data-tierf="Bronze">Bronze</button>
+      <button class="pill-btn" data-tierf="Silver">Silver</button>
+      <button class="pill-btn" data-tierf="Gold">Gold</button>
+    </div>
+  </div>
+  <div class="data-note" id="dataNote"></div>
+
+  <section class="panel" id="panel-champions"><div id="championsContent"></div></section>
+
+  <section class="panel active" id="panel-schedule">
+    <input class="search-box" id="matchSearch" placeholder="Search a player, category or match #&hellip;">
+    <div id="scheduleList"></div>
+  </section>
+
+  <section class="panel" id="panel-groups">
+    <input class="search-box" id="groupSearch" placeholder="Search a player by name&hellip;">
+    <div class="groups-grid" id="groupsGrid"></div>
+  </section>
+
+  <section class="panel" id="panel-playoff">
+    <div class="court-filter-row" id="playoffViewToggle">
+      <span class="filter-label">View</span>
+      <button class="pill-btn active" data-playoffview="bracket">Bracket</button>
+      <button class="pill-btn" data-playoffview="chrono">Chronological</button>
+    </div>
+    <div id="playoffContent"></div>
+  </section>
+
+  <section class="panel" id="panel-rankings">
+    <div class="filter-bar">
+      <div class="filter-group" id="rankStageFilter">
+        <span class="filter-label">Stage</span>
+        <button class="pill-btn active" data-stagef="All">All</button>
+        <button class="pill-btn" data-stagef="Group">Group</button>
+        <button class="pill-btn" data-stagef="Playoff">Playoff</button>
+      </div>
+      <div class="filter-group" id="rankDayFilter">
+        <span class="filter-label">Day</span>
+        <button class="pill-btn active" data-dayf="All">All</button>
+        <button class="pill-btn" data-dayf="2026-10-23">Fri 23</button>
+        <button class="pill-btn" data-dayf="2026-10-24">Sat 24</button>
+        <button class="pill-btn" data-dayf="2026-10-25">Sun 25</button>
+      </div>
+    </div>
+    <input class="search-box" id="rankingSearch" placeholder="Search a player by name&hellip;">
+    <div id="rankingList"></div>
+  </section>
+
+  <section class="panel" id="panel-format"><div id="formatContent"></div></section>
+
+  <p class="footnote">Tatler Padel Series Hong Kong &middot; Pick &amp; Match &middot; 23&ndash;25 Oct 2026 &middot; times in Hong Kong time</p>
+</main>
+
+<div class="side-overlay" id="drawerOverlay"></div>
+<div class="side-panel" id="drawer">
+  <div class="side-head">
+    <button class="side-close" id="drawerClose">&times;</button>
+    <h3 id="drawerTitle">Pair</h3>
+    <p id="drawerSub"></p>
+  </div>
+  <div class="side-body" id="drawerBody"></div>
+</div>
+
+<div class="side-overlay" id="matchDrawerOverlay"></div>
+<div class="side-panel" id="matchDrawer">
+  <div class="side-head">
+    <button class="side-close" id="matchDrawerClose">&times;</button>
+    <h3 id="mdMatchTitle">Match</h3>
+    <div class="md-meta"><span class="md-num" id="mdNum">#0</span><span class="status-pill" id="mdStatus"></span></div>
+    <p id="mdTime"></p>
+  </div>
+  <div class="side-body"><div id="mdBody"></div></div>
+</div>
+
+<div class="adm-toast" id="admToast"></div>
+<script src="data-seed.js"></script>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
