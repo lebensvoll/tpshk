@@ -634,3 +634,15 @@ details.day-section:not([open]) > summary.day-title::after { transform: rotate(-
 .adm-log .pend { color: #ffb366; }
 .match-card.has-pending::after { content: 'unsynced'; position: absolute; bottom: 6px; right: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; color: #ffb366; }
 .pill-btn.active[data-playoffview] { background: var(--panel-3); border-color: var(--text-secondary); color: var(--text-primary); }
+
+/* Web view only: compact centered timeline, larger names and scores. */
+.view-web .tl { max-width: 700px; margin: 0 auto; }
+.view-web .match-card { padding: 14px 18px; }
+.view-web .match-card .sb-row { gap: 18px; padding: 6px 0; }
+.view-web .match-card .sb-names { max-width: 78%; gap: 2px; }
+.view-web .match-card .sb-names span { font-size: 16px; }
+.view-web .match-card .sb-set { font-size: 26px; min-width: 24px; }
+.view-web .match-card .sb-set .sb-tb { font-size: 11px; }
+.view-web .match-card .sb-sets { gap: 12px; }
+.view-web .tl-time { padding-top: 15px; }
+.view-web .tl-time b { font-size: 15px; }
