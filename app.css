@@ -868,3 +868,6 @@ table.standings .rank-team-names { min-width: 0; overflow: hidden; }
 /* Footer: event line a bit larger; credit in the same muted tone, slightly dimmer and smaller. */
 .footnote { font-size: 12.5px; }
 .credit, html[data-theme="pm"] .credit { font-size: 11px; color: color-mix(in srgb, var(--text-muted) 72%, var(--bg-1)); }
+
+.nowrap { white-space: nowrap; }
+.footnote { line-height: 1.6; }
