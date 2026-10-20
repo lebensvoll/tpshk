@@ -6,8 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <title>TPS HK — Score Entry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('tps-hk-theme')||'tatler'}catch(e){document.documentElement.dataset.theme='tatler'}</script>
 </head>
 <body>
 <div class="adm-bar" id="admBar"></div>
@@ -18,9 +19,15 @@
         <h1 class="brand-title">Tatler Padel Series Hong Kong</h1>
         <p class="brand-sub"><b>23&ndash;25 Oct 2026</b><span class="sep">&bull;</span>Pick &amp; Match</p>
       </div>
-      <div class="view-toggle">
-        <button data-view="web">Web</button>
-        <button data-view="mobile">Mobile</button>
+      <div class="topbar-controls">
+        <div class="view-toggle theme-toggle" title="Colour theme">
+          <button data-theme-btn="tatler">Tatler</button>
+          <button data-theme-btn="pm">Pick &amp; Match</button>
+        </div>
+        <div class="view-toggle">
+          <button data-view="web">Web</button>
+          <button data-view="mobile">Mobile</button>
+        </div>
       </div>
     </div>
     <nav class="tabs">

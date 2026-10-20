@@ -15,13 +15,9 @@
 
   // Apps Script web app of the live sheet (not secret: writing needs the admin key).
   const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAycSguuF-OkQAliH5XHGW2ma5nN_fPKndQ2pp7wfyXM13Qho2Y501-ss2HgjthkgF/exec';
-  // Earlier deployments: browsers that saved one of these switch to the current link.
-  const OLD_SCRIPT_URLS = [
-    'https://script.google.com/macros/s/AKfycbxAEzKeUSZBFyh_RywfDfExWaHFkAzvWc3AWCbc1psQB7ifdCZkDo-73quRdiCGHMHY/exec',
-    'https://script.google.com/macros/s/AKfycbxBiGja8lEJnVHhoCwbHMxRKNOWkGb2MSXMv0XbZGkydZVBt6yRsxHXIN_HnnIlwV-z/exec',
-  ];
-  let S = Object.assign({ scriptUrl: DEFAULT_SCRIPT_URL, key: '', device: '', autoCsv: false }, lsGet(LS.settings, {}));
-  if (!S.scriptUrl || OLD_SCRIPT_URLS.includes(S.scriptUrl)) { S.scriptUrl = DEFAULT_SCRIPT_URL; lsSet(LS.settings, S); }
+  // Everyone always uses the built-in link -- only the password and device name are entered.
+  let S = Object.assign({ key: '', device: '', autoCsv: false }, lsGet(LS.settings, {}));
+  S.scriptUrl = DEFAULT_SCRIPT_URL;
   let edits = lsGet(LS.edits, {});   // {matchId: {fields, prev, ts, synced, syncedAt}}
   let log = lsGet(LS.log, []);       // newest first
   let conn = { state: 'idle', msg: '' };
@@ -98,7 +94,7 @@
     const bar = document.getElementById('admBar'); if (!bar) return;
     const p = pendingIds().length;
     let dot = 'warn', text;
-    if (!online()) text = TPS.CONFIG.SHEET_ID ? 'Offline mode — results saved on this device (set the Apps Script link in Settings)' : 'Offline mode — results saved on this device';
+    if (!online()) text = 'Enter the password in Settings & backup — until then results stay on this device';
     else if (syncing) text = 'Syncing…';
     else if (conn.state === 'err') { dot = 'err'; text = conn.msg; }
     else { dot = 'ok'; text = conn.msg || 'Connected'; }
@@ -348,8 +344,7 @@
     const p = pendingIds();
     const body = document.getElementById('drawerBody');
     body.innerHTML = `<div class="adm-form">
-      <div class="adm-field"><label>Apps Script web-app link (…/exec)</label><input type="url" id="sUrl" value="${esc(S.scriptUrl)}" placeholder="https://script.google.com/macros/s/…/exec"></div>
-      <div class="adm-field"><label>Admin key</label><input type="password" id="sKey" value="${esc(S.key)}" placeholder="same as ADMIN_KEY in the script"></div>
+      <div class="adm-field"><label>Password</label><input type="password" id="sKey" value="${esc(S.key)}" placeholder="password from the organiser"></div>
       <div class="adm-field"><label>Device / person name (goes into the log)</label><input type="text" id="sDev" value="${esc(S.device)}" placeholder="e.g. Olga phone"></div>
       <label class="adm-hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="sCsv" ${S.autoCsv ? 'checked' : ''}> Download a CSV backup after every save</label>
       <div class="adm-actions" style="position:static">
@@ -370,12 +365,12 @@
     </div>`;
     const $ = id => document.getElementById(id);
     $('sSave').onclick = () => {
-      S = { scriptUrl: $('sUrl').value.trim(), key: $('sKey').value.trim(), device: $('sDev').value.trim(), autoCsv: $('sCsv').checked };
+      S = { scriptUrl: DEFAULT_SCRIPT_URL, key: $('sKey').value.trim(), device: $('sDev').value.trim(), autoCsv: $('sCsv').checked };
       lsSet(LS.settings, S); toast('Settings saved'); renderBar(); TPS.refresh().then(flush);
     };
     $('sTest').onclick = async () => {
-      const url = $('sUrl').value.trim(), key = $('sKey').value.trim(), out = $('sTestOut');
-      if (!url) { out.textContent = 'Paste the Apps Script link first.'; return; }
+      const url = DEFAULT_SCRIPT_URL, key = $('sKey').value.trim(), out = $('sTestOut');
+      if (!key) { out.textContent = 'Enter the password first.'; return; }
       out.textContent = 'Testing…';
       try {
         const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=ping&_=' + Date.now()); const j = await r.json();

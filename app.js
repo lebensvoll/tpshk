@@ -94,7 +94,19 @@ function normDate(d) {
   const m = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); // gviz may render dates as M/D/YYYY
   return m ? `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}` : d;
 }
-function bucketColor(c, t) { return (BUCKET_COLORS[c] && BUCKET_COLORS[c][t]) || '#7fa08c'; }
+// Pick & Match theme (light, pink): deeper category colours that read on white.
+const BUCKET_COLORS_PM = {
+  Male:   { Bronze: '#3b6ea5', Silver: '#2b8cc4', Gold: '#0a9bad' },
+  Female: { Bronze: '#c0785a', Silver: '#a8608f', Gold: '#e73887' },
+};
+function currentTheme() { return document.documentElement.dataset.theme === 'pm' ? 'pm' : 'tatler'; }
+function bucketColor(c, t) { const map = currentTheme() === 'pm' ? BUCKET_COLORS_PM : BUCKET_COLORS; return (map[c] && map[c][t]) || '#7fa08c'; }
+function setTheme(th) {
+  document.documentElement.dataset.theme = th;
+  try { localStorage.setItem('tps-hk-theme', th); } catch (e) {}
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.classList.toggle('active', b.dataset.themeBtn === th));
+}
+TPS.setTheme = setTheme;
 function bcAttr(c, t) { return `--bc:${bucketColor(c, t)}`; }
 function passesFilters(c, t) { const F = TPS.FILTERS; return (F.category === 'All' || c === F.category) && (F.tier === 'All' || t === F.tier); }
 function catTierLabel(c, t) { return `${t} ${CAT_LABEL[c] || c}`; }
@@ -652,7 +664,7 @@ let userPickedView = false;
 function setView(v) {
   document.body.classList.toggle('view-mobile', v === 'mobile');
   document.body.classList.toggle('view-web', v === 'web');
-  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  document.querySelectorAll('.view-toggle button[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
 }
 function pills(containerSel, attr, apply) {
   document.querySelectorAll(containerSel + ' .pill-btn').forEach(b => b.addEventListener('click', () => {
@@ -667,13 +679,15 @@ TPS.rebuild = () => { buildModel(TPS.lastRaw || window.TPS_SEED); renderAll(); }
 TPS.refresh = refresh;
 
 async function init() {
+  setTheme(currentTheme());
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.addEventListener('click', () => { setTheme(b.dataset.themeBtn); renderAll(); }));
   await loadData();
   renderAll();
   document.getElementById('groupSearch').addEventListener('input', renderGroups);
   document.getElementById('matchSearch').addEventListener('input', renderSchedule);
   document.getElementById('rankingSearch').addEventListener('input', renderRankings);
   document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
-  document.querySelectorAll('.view-toggle button').forEach(b => b.addEventListener('click', () => { userPickedView = true; setView(b.dataset.view); }));
+  document.querySelectorAll('.view-toggle button[data-view]').forEach(b => b.addEventListener('click', () => { userPickedView = true; setView(b.dataset.view); }));
   pills('#categoryFilter', 'catf', v => { TPS.FILTERS.category = v; renderAll(); });
   pills('#tierFilter', 'tierf', v => { TPS.FILTERS.tier = v; renderAll(); });
   pills('#playoffViewToggle', 'playoffview', v => { TPS.PLAYOFF_VIEW = v; renderPlayoff(); });
