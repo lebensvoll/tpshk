@@ -258,7 +258,7 @@
       body.querySelector('[data-act=save]').addEventListener('click', save);
       body.querySelector('[data-act=clear]').addEventListener('click', e => {
         if (e.target.dataset.armed !== '1') { e.target.dataset.armed = '1'; e.target.textContent = 'Tap again to clear'; return; }
-        fieldList(m).forEach(h => { if (!/^Team \d ID$/.test(h)) form[h] = ''; });
+        fieldList(m).forEach(h => { if (!/^Team \d ID$|^Date$|^Start$/.test(h)) form[h] = ''; });
         form.__status = 'Scheduled'; form.__winner = ''; save();
       });
       body.querySelector('[data-act=cancel]').addEventListener('click', () => TPS.closePanel('matchDrawer'));
@@ -269,7 +269,9 @@
     async function save() {
       const d = draftMatch();
       if (form.__status === 'Walkover' && !form.__winner) { toast('Walkover: pick the winner first', true); return; }
-      if (!/^\d{2}:\d{2}$/.test(form.Start || '')) { toast('Start time must look like 15:30', true); return; }
+      // Empty time/day fields keep the scheduled values (never wipe the timetable by accident).
+      if (!form.Start) form.Start = m.start;
+      if (!form.Date) form.Date = m.date;
       const clash = TPS.APP.matches.find(x => x.id !== m.id && x.date === form.Date && x.start === form.Start);
       const fields = {};
       fieldList(m).forEach(h => { fields[h] = form[h] || ''; });
