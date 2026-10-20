@@ -124,7 +124,7 @@
   function fieldList(m) {
     const f = ['S1 T1', 'S1 T2', 'TB1 T1', 'TB1 T2'];
     if (m.sheet === 'playoff') f.push('S2 T1', 'S2 T2', 'TB2 T1', 'TB2 T2', 'STB T1', 'STB T2', 'Team 1 ID', 'Team 2 ID');
-    return f.concat(['Status', 'Winner', 'Note']);
+    return ['Date', 'Start'].concat(f, ['Status', 'Winner', 'Note']);
   }
   const short = side => side.team ? side.team.name : side.label;
 
@@ -134,6 +134,8 @@
     // Walkover and "on court, no score yet" can't be derived from the score -- keep them.
     form.__status = form.Status === 'Walkover' ? 'Walkover' : (form.Status === 'In Progress' && !m.scored ? 'In Progress' : 'Auto');
     form.__winner = form.Winner === '1' || form.Winner === '2' ? form.Winner : '';
+    form.Date = m.date; form.Start = m.start;   // normalised (YYYY-MM-DD, HH:MM)
+    const days = Array.from(new Set(TPS.APP.matches.map(x => x.date))).sort();
 
     document.getElementById('mdMatchTitle').textContent = TPS.stageLabel(m);
     document.getElementById('mdNum').textContent = '#' + m.num;
@@ -205,6 +207,12 @@
       const preview = d.status === 'Walkover' ? (winName ? `Walkover → ${winName}` : 'Walkover — pick the winner')
         : d.status === 'Completed' ? `Completed → ${winName || '?'}` : d.status === 'In Progress' ? 'In progress (score not final yet)' : 'Scheduled (no score)';
       body.innerHTML = `<div class="adm-form">
+        <div class="adm-row2">
+          <div class="adm-field"><label>Day</label><select data-f="Date">
+            ${days.map(d => `<option value="${d}" ${form.Date === d ? 'selected' : ''}>${esc(U.dayLabel(d))}</option>`).join('')}
+          </select></div>
+          <div class="adm-field"><label>Start time (HK)</label><input type="time" step="300" data-f="Start" value="${esc(form.Start)}"></div>
+        </div>
         ${m.sheet === 'playoff' ? `<div class="adm-teams">${teamSelect(1)}${teamSelect(2)}</div>` : ''}
         ${setBlocks.join('')}
         <div class="adm-row2">
@@ -261,6 +269,8 @@
     async function save() {
       const d = draftMatch();
       if (form.__status === 'Walkover' && !form.__winner) { toast('Walkover: pick the winner first', true); return; }
+      if (!/^\d{2}:\d{2}$/.test(form.Start || '')) { toast('Start time must look like 15:30', true); return; }
+      const clash = TPS.APP.matches.find(x => x.id !== m.id && x.date === form.Date && x.start === form.Start);
       const fields = {};
       fieldList(m).forEach(h => { fields[h] = form[h] || ''; });
       fields.Status = form.__status === 'Auto' ? d.status : form.__status;
@@ -271,7 +281,7 @@
       const label = `#${m.num} ${TPS.stageLabel(m)} · ${short(m.side1)} v ${short(m.side2)}`;
       edits[m.id] = { fields, prev: base, ts: Date.now(), synced: false, label };
       saveEdits();
-      const summary = scoreText(fields, m);
+      const summary = scoreText(fields, m) + (form.Start !== m.start || form.Date !== m.date ? ` · moved to ${U.shortDay(form.Date)} ${form.Start}` : '') + (clash ? ` · ⚠ same time as #${clash.num}` : '');
       TPS.closePanel('matchDrawer');
       TPS.rebuild(); renderBar();
       if (S.autoCsv) downloadMatchesCsv();
