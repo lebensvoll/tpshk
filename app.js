@@ -199,8 +199,10 @@ function evaluateMatch(m) {
   const r = scoreResult(m), raw = m.statusRaw;
   m.scored = r.any;
   if (raw === 'Walkover') { m.status = 'Walkover'; m.winnerSide = m.winnerRaw === 2 ? 2 : m.winnerRaw === 1 ? 1 : 0; }
+  // A complete score always decides the winner; the Winner cell only matters for
+  // walkovers and matches stopped early (e.g. retired at 2-1).
+  else if (r.complete) { m.status = 'Completed'; m.winnerSide = r.side; }
   else if (raw === 'Completed') { m.status = 'Completed'; m.winnerSide = m.winnerRaw || r.side; }
-  else if (r.complete) { m.status = 'Completed'; m.winnerSide = m.winnerRaw || r.side; }
   else if (r.any || raw === 'In Progress') { m.status = 'In Progress'; m.winnerSide = 0; }
   else { m.status = 'Scheduled'; m.winnerSide = 0; }
   m.finished = (m.status === 'Completed' || m.status === 'Walkover') && !!m.winnerSide;
@@ -360,13 +362,13 @@ function matchCardHtml(m, opts) {
   return `
     <div class="match-card ${live ? 'live' : ''} ${done ? 'completed' : ''} ${m.id === TPS.APP.nextId && !live ? 'next' : ''} ${extra}" data-mid="${esc(m.id)}" style="${bcAttr(m.category, m.tier)}">
       <div class="match-card-top">
-        ${timeHtml}<span class="match-num">#${m.num}</span>
+        <span class="match-num">#${m.num}</span>
         <span class="match-tag">${esc(stageLabel(m))}</span>
-        ${lbl ? `<span class="status-pill ${wo ? 'Walkover' : sc}">${esc(lbl)}</span>` : ''}
+        <span class="card-right">${lbl ? `<span class="status-pill ${wo ? 'Walkover' : sc}">${esc(lbl)}</span>` : ''}${timeHtml}</span>
       </div>
       <div class="scoreboard">
-        <div class="sb-row ${w1 ? 'winner' : ''}"><div class="sb-names">${sideLines(m.side1)}</div><div class="sb-sets">${wo ? (w1 ? '<span class="sb-set">WO</span>' : '') : scoreCells(m, 1)}</div></div>
-        <div class="sb-row ${w2 ? 'winner' : ''}"><div class="sb-names">${sideLines(m.side2)}</div><div class="sb-sets">${wo ? (w2 ? '<span class="sb-set">WO</span>' : '') : scoreCells(m, 2)}</div></div>
+        <div class="sb-row ${w1 ? 'winner' : done ? 'loser' : ''}"><div class="sb-names">${sideLines(m.side1)}</div><div class="sb-sets">${wo ? (w1 ? '<span class="sb-set">WO</span>' : '') : scoreCells(m, 1)}</div></div>
+        <div class="sb-row ${w2 ? 'winner' : done ? 'loser' : ''}"><div class="sb-names">${sideLines(m.side2)}</div><div class="sb-sets">${wo ? (w2 ? '<span class="sb-set">WO</span>' : '') : scoreCells(m, 2)}</div></div>
       </div>
     </div>`;
 }

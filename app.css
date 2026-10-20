@@ -669,3 +669,49 @@ details.day-section:not([open]) > summary.day-title::after { transform: rotate(-
 .view-mobile .match-start { font-size: 22px; }
 .tl .tl-event .ev-time { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: .02em; line-height: 1; flex-shrink: 0; }
 .view-web .tl .tl-event .ev-time { font-size: 26px; }
+
+/* =====================================================================
+   Contrast pass: solid deep-green base like the match drawer, opaque
+   cards, completed matches presented (not greyed), time top-right.
+   ===================================================================== */
+:root {
+  --bg-0: #061f16; --bg-1: #082a1e; --bg-2: #0b3426;
+  --panel: #0f3a2b; --panel-2: #134634; --panel-3: #1a5640;
+  --border: rgba(255,255,255,.18);
+  --text-primary: #ffffff; --text-secondary: #d3e3d8; --text-muted: #93b4a0;
+}
+body { background: var(--bg-1); }
+body::before { background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 40%, var(--bg-1) 100%); }
+.topbar { background: linear-gradient(90deg, #0d3a2b 0%, #44695a 100%); padding-bottom: 0; }
+.tab-btn { color: rgba(255,255,255,.78); }
+.data-note, .search-box, .panel-note { background: var(--panel); }
+
+/* Cards: opaque panel with a tint of the category colour */
+.match-card {
+  background: color-mix(in srgb, var(--bc, transparent) 12%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--bc, var(--border)) 45%, rgba(255,255,255,.12));
+  border-left: 4px solid var(--bc, var(--border));
+  box-shadow: 0 10px 26px -14px rgba(0,0,0,.7);
+}
+.group-card, .ranking-table-wrap, .champ-card { background: var(--panel); }
+.sb-names span { color: var(--text-primary); }
+
+/* Header row: number + tag on the left, status + start time on the right */
+.match-card .match-card-top { padding-right: 0; flex-wrap: nowrap; }
+.match-card .match-tag { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.card-right { margin-left: auto; display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.match-card .status-pill { position: static; pointer-events: none; }
+.match-card.compact .match-card-top { padding-right: 0; }
+
+/* Completed: keep full colour, add a lime frame and a clear winner */
+.match-card.completed { filter: none; border-color: color-mix(in srgb, var(--lime) 55%, transparent); border-left-color: var(--lime); }
+.match-card.completed .match-start { color: var(--text-muted); }
+.match-card.completed .status-pill {
+  color: #0d3a2b; background: var(--lime); padding: 4px 8px; border-radius: 6px; letter-spacing: .08em;
+}
+.sb-row.winner .sb-names span { font-weight: 800; color: #fff; }
+.sb-row.winner .sb-names span:first-child::before { content: '▸ '; color: var(--lime); }
+.sb-row.winner .sb-set { color: var(--lime); }
+.sb-row.loser .sb-names span, .sb-row.loser .sb-set { color: var(--text-muted); }
+.match-card.live { box-shadow: 0 0 0 1px var(--lime), 0 0 24px -6px rgba(200,234,103,.45); }
+.status-pill.Walkover { color: #0d3a2b; background: var(--walkover); padding: 4px 8px; border-radius: 6px; }
