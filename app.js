@@ -480,10 +480,10 @@ function renderGroups() {
       cards.push(`<div class="group-card" style="${bcAttr(b.category, b.tier)}">
         <div class="group-card-head"><span>${esc(catTierLabel(b.category, b.tier))} &middot; Group ${esc(g)}</span><span class="tier-tag">${gi.played}/${gi.matches.length} played</span></div>
         <table class="standings">
-          <tr><th class="team-col">Pair</th><th>P</th><th>W</th><th>L</th><th>Games</th><th>GD</th></tr>
+          <tr><th class="team-col">Pair</th><th>W</th><th>L</th><th>Games</th><th>GD</th></tr>
           ${rows.map((s, i) => `<tr class="clickable ${s.withdrawn ? 'withdrawn-row' : ''} ${full && i === 0 && s.p ? 'rank-1' : ''}" data-team="${esc(s.id)}">
-            <td class="team-col"><div class="rank-team-cell"><span class="rank-badge">${i + 1}</span><span class="rank-team-names"><span class="rank-team-line">${esc(s.team.p1)}</span><span class="rank-team-line">${esc(s.team.p2)}</span></span>${s.withdrawn ? '<span class="withdrawn-badge">Withdrew</span>' : ''}${s.level ? '<span class="level-mark" title="Level on every criterion — decided by draw">=</span>' : ''}</div></td>
-            <td>${s.p}</td><td>${s.w}</td><td>${s.l}</td><td>${s.gf}-${s.ga}</td><td>${s.gd > 0 ? '+' : ''}${s.gd}</td></tr>`).join('')}
+            <td class="team-col"><div class="rank-team-cell"><span class="rank-badge">${i + 1}</span><span class="rank-team-names"><span class="rank-team-line" title="${esc(s.team.p1)}">${esc(s.team.p1)}</span><span class="rank-team-line" title="${esc(s.team.p2)}">${esc(s.team.p2)}</span></span>${s.withdrawn ? '<span class="withdrawn-badge">Withdrew</span>' : ''}${s.level ? '<span class="level-mark" title="Level on every criterion — decided by draw">=</span>' : ''}</div></td>
+            <td>${s.w}</td><td>${s.l}</td><td>${s.gf}-${s.ga}</td><td>${s.gd > 0 ? '+' : ''}${s.gd}</td></tr>`).join('')}
         </table>
         ${gi.complete && gi.table[0] ? `<div class="group-foot">Group winner: <b>${esc(gi.table[0].team.name)}</b></div>` : ''}
       </div>`);
@@ -566,7 +566,7 @@ function renderRankings() {
       <div class="ranking-table-wrap"><table class="standings">
         <tr><th class="team-col">Pair</th><th>Grp</th><th>P</th><th>W</th><th>L</th><th>Games</th><th>GD</th></tr>
         ${rows.map((s, i) => `<tr class="clickable ${i === 0 && s.w ? 'rank-1' : ''}" data-team="${esc(s.id)}">
-          <td class="team-col"><div class="rank-team-cell"><span class="rank-badge">${i + 1}</span><span class="rank-team-names"><span class="rank-team-line">${esc(s.team.p1)}</span><span class="rank-team-line">${esc(s.team.p2)}</span></span></div></td>
+          <td class="team-col"><div class="rank-team-cell"><span class="rank-badge">${i + 1}</span><span class="rank-team-names"><span class="rank-team-line" title="${esc(s.team.p1)}">${esc(s.team.p1)}</span><span class="rank-team-line" title="${esc(s.team.p2)}">${esc(s.team.p2)}</span></span></div></td>
           <td>${esc(s.group || '–')}</td><td>${s.p}</td><td>${s.w}</td><td>${s.l}</td><td>${s.gf}-${s.ga}</td><td>${s.gd > 0 ? '+' : ''}${s.gd}</td></tr>`).join('')}
       </table></div></div>`;
   }).join('');

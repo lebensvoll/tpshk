@@ -843,3 +843,28 @@ html[data-theme="pm"] .credit { color: #c9a3b5; }
   width: auto; height: auto; background: none; opacity: .85; margin: 0 11px;
   font-size: .78em; font-weight: 700; line-height: 1; color: var(--lime);
 }
+
+/* Standings: every pair on two lines (one player per line), stats centred between them. */
+table.standings .rank-team-line { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.35; }
+table.standings .rank-team-line + .rank-team-line::before { content: none; }
+table.standings td { vertical-align: middle; }
+table.standings .rank-team-names { min-width: 0; overflow: hidden; }
+.groups-grid table.standings, .ranking-table-wrap table.standings:not(.fmt-standings) { table-layout: fixed; }
+.groups-grid table.standings th.team-col, .groups-grid table.standings td.team-col { width: 54%; }
+.ranking-table-wrap table.standings:not(.fmt-standings) th.team-col, .ranking-table-wrap table.standings:not(.fmt-standings) td.team-col { width: 46%; }
+/* narrow stat columns so full names fit */
+.groups-grid table.standings th.team-col, .groups-grid table.standings td.team-col { width: auto; }
+.groups-grid table.standings th:not(.team-col), .groups-grid table.standings td:not(.team-col) { width: 30px; padding-left: 1px; padding-right: 1px; }
+.groups-grid table.standings th:nth-child(4), .groups-grid table.standings td:nth-child(4) { width: 44px; }
+.groups-grid table.standings th:last-child, .groups-grid table.standings td:last-child { width: 34px; padding-right: 8px; }
+.groups-grid table.standings td.team-col { padding-left: 10px; font-size: 12.5px; }
+.groups-grid table.standings .rank-badge { margin-right: 6px; flex-shrink: 0; }
+.groups-grid table.standings td.team-col { font-size: 12px; padding-left: 8px; }
+.groups-grid table.standings th:nth-child(2), .groups-grid table.standings td:nth-child(2),
+.groups-grid table.standings th:nth-child(3), .groups-grid table.standings td:nth-child(3) { width: 24px; }
+.groups-grid table.standings th:last-child, .groups-grid table.standings td:last-child { width: 30px; padding-right: 6px; }
+.groups-grid table.standings th:nth-child(4), .groups-grid table.standings td:nth-child(4) { width: 42px; }
+
+/* Footer: event line a bit larger; credit in the same muted tone, slightly dimmer and smaller. */
+.footnote { font-size: 12.5px; }
+.credit, html[data-theme="pm"] .credit { font-size: 11px; color: color-mix(in srgb, var(--text-muted) 72%, var(--bg-1)); }
