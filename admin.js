@@ -13,7 +13,10 @@
   const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 
-  let S = Object.assign({ scriptUrl: '', key: '', device: '', autoCsv: false }, lsGet(LS.settings, {}));
+  // Apps Script web app of the live sheet (not secret: writing needs the admin key).
+  const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAEzKeUSZBFyh_RywfDfExWaHFkAzvWc3AWCbc1psQB7ifdCZkDo-73quRdiCGHMHY/exec';
+  let S = Object.assign({ scriptUrl: DEFAULT_SCRIPT_URL, key: '', device: '', autoCsv: false }, lsGet(LS.settings, {}));
+  if (!S.scriptUrl) S.scriptUrl = DEFAULT_SCRIPT_URL;
   let edits = lsGet(LS.edits, {});   // {matchId: {fields, prev, ts, synced, syncedAt}}
   let log = lsGet(LS.log, []);       // newest first
   let conn = { state: 'idle', msg: '' };

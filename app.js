@@ -10,7 +10,7 @@
 // Empty = the site shows the built-in copy of the draw (data-seed.js).
 // ---------------------------------------------------------------------
 const CONFIG = {
-  SHEET_ID: '',
+  SHEET_ID: '1lPx9IrVK2GQhQEChZqBctcP3L5Jow-HVTFLBfOg4YFk',
   refreshMs: 30000,
   timeZone: 'Asia/Hong_Kong',
   start: new Date('2026-10-23T15:00:00+08:00'),
@@ -490,7 +490,7 @@ function renderSchedule() {
     if (f && !(String(m.num) === f.replace('#', '') || (m.side1.label + ' ' + m.side2.label + ' ' + stageLabel(m)).toLowerCase().includes(f))) return;
     items.push({ kind: 'match', date: m.date, start: m.start, end: m.end, m });
   });
-  if (showEvents) A.programme.forEach(p => items.push({ kind: 'event', date: p.date, start: p.start, end: p.end, p }));
+  if (showEvents) A.programme.filter(p => p.type !== 'Buffer').forEach(p => items.push({ kind: 'event', date: p.date, start: p.start, end: p.end, p }));
   if (!items.length) { wrap.innerHTML = '<div class="empty-state">No matches found.</div>'; return; }
   items.sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start) || (a.kind === 'event' ? 1 : -1));
   const byDate = {}; items.forEach(it => { (byDate[it.date] = byDate[it.date] || []).push(it); });
