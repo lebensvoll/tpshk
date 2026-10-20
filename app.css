@@ -646,3 +646,26 @@ details.day-section:not([open]) > summary.day-title::after { transform: rotate(-
 .view-web .match-card .sb-sets { gap: 12px; }
 .view-web .tl-time { padding-top: 15px; }
 .view-web .tl-time b { font-size: 15px; }
+
+/* Header subtitle: condensed caps, lime date, larger. */
+.brand-sub {
+  font-family: var(--font-ui); font-weight: 600; text-transform: uppercase;
+  letter-spacing: .12em; font-size: clamp(14px, 1.9vw, 21px); opacity: 1; margin-top: 8px;
+  color: var(--text-secondary);
+}
+.brand-sub b { color: var(--lime); font-weight: 700; }
+.brand-sub .sep { color: var(--lime); opacity: .7; margin: 0 10px; }
+
+/* Start time as the card headline (end times removed everywhere). */
+.match-card .match-card-top { align-items: center; }
+.match-start {
+  font-family: var(--font-display); font-size: 24px; line-height: 1; color: var(--lime-text);
+  letter-spacing: .02em; flex-shrink: 0; display: inline-flex; align-items: baseline; gap: 6px;
+}
+.match-start small { font-family: var(--font-ui); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+.match-card.live .match-start { color: var(--lime); }
+.match-card.completed .match-start { color: var(--text-secondary); }
+.view-web .match-start { font-size: 28px; }
+.view-mobile .match-start { font-size: 22px; }
+.tl .tl-event .ev-time { font-family: var(--font-display); font-size: 22px; font-weight: 400; letter-spacing: .02em; line-height: 1; flex-shrink: 0; }
+.view-web .tl .tl-event .ev-time { font-size: 26px; }

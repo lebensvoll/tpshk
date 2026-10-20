@@ -14,9 +14,12 @@
   const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 
   // Apps Script web app of the live sheet (not secret: writing needs the admin key).
-  const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBiGja8lEJnVHhoCwbHMxRKNOWkGb2MSXMv0XbZGkydZVBt6yRsxHXIN_HnnIlwV-z/exec';
+  const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAycSguuF-OkQAliH5XHGW2ma5nN_fPKndQ2pp7wfyXM13Qho2Y501-ss2HgjthkgF/exec';
   // Earlier deployments: browsers that saved one of these switch to the current link.
-  const OLD_SCRIPT_URLS = ['https://script.google.com/macros/s/AKfycbxAEzKeUSZBFyh_RywfDfExWaHFkAzvWc3AWCbc1psQB7ifdCZkDo-73quRdiCGHMHY/exec'];
+  const OLD_SCRIPT_URLS = [
+    'https://script.google.com/macros/s/AKfycbxAEzKeUSZBFyh_RywfDfExWaHFkAzvWc3AWCbc1psQB7ifdCZkDo-73quRdiCGHMHY/exec',
+    'https://script.google.com/macros/s/AKfycbxBiGja8lEJnVHhoCwbHMxRKNOWkGb2MSXMv0XbZGkydZVBt6yRsxHXIN_HnnIlwV-z/exec',
+  ];
   let S = Object.assign({ scriptUrl: DEFAULT_SCRIPT_URL, key: '', device: '', autoCsv: false }, lsGet(LS.settings, {}));
   if (!S.scriptUrl || OLD_SCRIPT_URLS.includes(S.scriptUrl)) { S.scriptUrl = DEFAULT_SCRIPT_URL; lsSet(LS.settings, S); }
   let edits = lsGet(LS.edits, {});   // {matchId: {fields, prev, ts, synced, syncedAt}}
@@ -139,7 +142,7 @@
     document.getElementById('mdMatchTitle').textContent = TPS.stageLabel(m);
     document.getElementById('mdNum').textContent = '#' + m.num;
     const st = document.getElementById('mdStatus'); st.textContent = m.status; st.className = 'status-pill ' + m.status.replace(/\s+/g, '');
-    document.getElementById('mdTime').textContent = `${U.dayLabel(m.date)} · ${m.start}–${m.end} · ${m.fmt.label}`;
+    document.getElementById('mdTime').textContent = `${U.dayLabel(m.date)} · ${m.start} · ${m.fmt.label}`;
     const body = document.getElementById('mdBody');
 
     const teamsOf = TPS.APP.teams.filter(t => t.category === m.category && t.tier === m.tier);

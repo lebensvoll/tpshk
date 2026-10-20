@@ -354,12 +354,13 @@ function matchCardHtml(m, opts) {
   const lbl = statusLabel(m);
   const w1 = done && m.winnerSide === 1, w2 = done && m.winnerSide === 2;
   const extra = TPS.decorateCard ? TPS.decorateCard(m) : '';
-  const timeHtml = opts.noTime ? '' : `<span class="match-date">${esc(shortDay(m.date))}</span><span class="match-time"><b>${esc(m.start)}</b>${esc(m.end)}</span>`;
+  // One court: the start time is the headline of the card. End times are not shown anywhere.
+  const timeHtml = `<span class="match-start">${opts.noDate ? '' : `<small>${esc(shortDay(m.date))}</small>`}${esc(m.start)}</span>`;
   const wo = m.status === 'Walkover';
   return `
     <div class="match-card ${live ? 'live' : ''} ${done ? 'completed' : ''} ${m.id === TPS.APP.nextId && !live ? 'next' : ''} ${extra}" data-mid="${esc(m.id)}" style="${bcAttr(m.category, m.tier)}">
       <div class="match-card-top">
-        <span class="match-num">#${m.num}</span>${timeHtml}
+        ${timeHtml}<span class="match-num">#${m.num}</span>
         <span class="match-tag">${esc(stageLabel(m))}</span>
         ${lbl ? `<span class="status-pill ${wo ? 'Walkover' : sc}">${esc(lbl)}</span>` : ''}
       </div>
@@ -499,16 +500,15 @@ function renderSchedule() {
     const list = byDate[d], ms = list.filter(i => i.kind === 'match').map(i => i.m);
     const allDone = ms.length && ms.every(m => m.finished);
     const open = !(allDone && d !== today);
-    const first = list[0].start, last = list[list.length - 1].end || list[list.length - 1].start;
+    const first = list[0].start;
     const rows = list.map(it => {
       if (it.kind === 'event') {
         const p = it.p;
-        return `<div class="tl-row ${p.type === 'Buffer' ? 'buffer' : ''}"><div class="tl-time"><b>${esc(p.start)}</b>${esc(p.end)}</div>
-          <div class="tl-event ${esc(p.type)}"><span class="ev-type">${esc(p.type)}</span><span>${esc(p.title)}</span></div></div>`;
+        return `<div class="tl-event ${esc(p.type)}"><span class="ev-time">${esc(p.start)}</span><span class="ev-type">${esc(p.type)}</span><span>${esc(p.title)}</span></div>`;
       }
-      return `<div class="tl-row"><div class="tl-time"><b>${esc(it.start)}</b>${esc(it.end)}</div>${matchCardHtml(it.m, { noTime: true })}</div>`;
+      return matchCardHtml(it.m, { noDate: true });
     }).join('');
-    return `<details class="day-section"${open ? ' open' : ''}><summary class="day-title">${esc(dayLabel(d))}<span class="day-meta">${esc(first)}–${esc(last)} · ${ms.length} match${ms.length === 1 ? '' : 'es'}${allDone ? ' · done' : ''}</span></summary><div class="tl">${rows}</div></details>`;
+    return `<details class="day-section"${open ? ' open' : ''}><summary class="day-title">${esc(dayLabel(d))}<span class="day-meta">from ${esc(first)} · ${ms.length} match${ms.length === 1 ? '' : 'es'}${allDone ? ' · done' : ''}</span></summary><div class="tl">${rows}</div></details>`;
   }).join('');
 }
 
@@ -607,7 +607,7 @@ function openMatchDrawer(m) {
   document.getElementById('mdNum').textContent = '#' + m.num;
   const st = document.getElementById('mdStatus');
   st.textContent = statusLabel(m) || m.status; st.className = 'status-pill ' + m.status.replace(/\s+/g, '');
-  document.getElementById('mdTime').textContent = `${dayLabel(m.date)} · ${m.start}–${m.end} · ${m.fmt.label}`;
+  document.getElementById('mdTime').textContent = `${dayLabel(m.date)} · ${m.start} · ${m.fmt.label}`;
   const w1 = m.finished && m.winnerSide === 1, w2 = m.finished && m.winnerSide === 2;
   const swapNote = (m.side1.swapped || m.side2.swapped) ? '<div class="md-note">Best runner-up came from the same group as its SF opponent &mdash; semi-final pairings swapped (no group rematch).</div>' : '';
   document.getElementById('mdBody').innerHTML = `
