@@ -822,3 +822,24 @@ html[data-theme="pm"] .adm-log { background: #fff; }
 }
 .brand-sub b { font-weight: 700; letter-spacing: .005em; }
 .brand-sub .sep { margin: 0 9px; }
+
+/* Footer credit: barely-there dark lime (dim pink in the Pick & Match theme). */
+.credit { text-align: center; margin: 4px 0 0; font-family: var(--font-body); font-size: 11px; font-weight: 400; letter-spacing: normal; color: #4f6a2c; } /* same type as .footnote above */
+html[data-theme="pm"] .credit { color: #c9a3b5; }
+
+/* Header subtitle: original Bangkok font (Inter), all bold, larger; thin divider instead of a dot. */
+.brand-sub, html[data-theme="pm"] .brand-sub {
+  font-family: var(--font-body); font-weight: 700; text-transform: none; letter-spacing: 0;
+  font-size: clamp(14px, 1.5vw, 18px); margin-top: 8px; display: flex; align-items: center; flex-wrap: wrap;
+}
+.brand-sub b { font-weight: 800; }
+.brand-sub .sep, html[data-theme="pm"] .brand-sub .sep {
+  display: inline-block; width: 1.5px; height: .95em; margin: 0 12px; opacity: .5;
+  background: currentColor; color: inherit;
+}
+
+/* Divider: ✕ in the theme accent colour (replaces the thin bar). */
+.brand-sub .sep, html[data-theme="pm"] .brand-sub .sep {
+  width: auto; height: auto; background: none; opacity: .85; margin: 0 11px;
+  font-size: .78em; font-weight: 700; line-height: 1; color: var(--lime);
+}

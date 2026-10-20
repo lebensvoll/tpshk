@@ -345,7 +345,7 @@
     const body = document.getElementById('drawerBody');
     body.innerHTML = `<div class="adm-form">
       <div class="adm-field"><label>Password</label><input type="password" id="sKey" value="${esc(S.key)}" placeholder="password from the organiser"></div>
-      <div class="adm-field"><label>Device / person name (goes into the log)</label><input type="text" id="sDev" value="${esc(S.device)}" placeholder="e.g. Olga phone"></div>
+      <div class="adm-field"><label>Device / person name (goes into the log)</label><input type="text" id="sDev" value="${esc(S.device)}" placeholder="e.g. Oleg Prachuk"></div>
       <label class="adm-hint" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="sCsv" ${S.autoCsv ? 'checked' : ''}> Download a CSV backup after every save</label>
       <div class="adm-actions" style="position:static">
         <button class="adm-btn primary" id="sSave">Save settings</button>
