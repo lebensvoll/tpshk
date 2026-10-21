@@ -164,7 +164,7 @@
     }
     function needsTb(i) {
       const g = m.fmt.games, a = U.num(form[SCORE_H[i][0]]), b = U.num(form[SCORE_H[i][1]]);
-      return (a === g && b === g - 1) || (a === g - 1 && b === g) || U.num(form[SCORE_H[i][2]]) != null || U.num(form[SCORE_H[i][3]]) != null;
+      return (a === g - 1 && b === g - 1) || (a === g && b === g - 1) || (a === g - 1 && b === g) || U.num(form[SCORE_H[i][2]]) != null || U.num(form[SCORE_H[i][3]]) != null;
     }
     function draftMatch() {
       const o = Object.assign({}, m.row);
@@ -233,7 +233,7 @@
           <button class="adm-btn danger" data-act="clear">Clear result</button>
           <button class="adm-btn" data-act="cancel">Cancel</button>
         </div>
-        <div class="adm-hint">Group match = 1 set to 4 (4-3 means a tie-break was played). Semi-final = 1 set to 6. Final = best of 3 to 6, 3rd set as a 10-point tie-break. Status "Auto" sets Completed / In Progress from the score.</div>
+        <div class="adm-hint">Group match = 1 set to 4 (tie-break at 3-3, ends 4-3). Semi-final = 1 set to 6. Final = best of 3 to 6, 3rd set as a 10-point tie-break. Status "Auto" sets Completed / In Progress from the score.</div>
       </div>`;
       wire();
     }
